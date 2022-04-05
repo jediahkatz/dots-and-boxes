@@ -4,6 +4,8 @@ const { Schema, model } = mongoose
 
 const gameSchema = new Schema(
     {
+        rows: { type: Number, required: true, min: 2, max: 6 },
+        cols: { type: Number, required: true, min: 2, max: 6 },
         player1: { type: Schema.Types.ObjectId, ref: 'User' },
         player2: { type: Schema.Types.ObjectId, ref: 'User' },
         player1_boxes: { type: Number, required: true, default: 0 },

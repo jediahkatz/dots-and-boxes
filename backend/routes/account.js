@@ -7,10 +7,13 @@ import auth from '../middlewares/auth.js'
 const router = express.Router()
 
 router.post('/signup', async (req, res) => {
-    const { username, password } = req.body
     try {
+        const { username, password } = req.body
+        if (!username || !password) {
+            return res.status(400).send({ msg: 'Not all fields have been entered' })
+        }
         if (await User.findOne({ username })) {
-            res.send({ error: 'User with that name already exists' })
+            res.status(400).send({ error: 'User with that name already exists' })
         } else {
             const passwordHash = await bcrypt.hash(password, 10)
             console.log(username, passwordHash)
@@ -19,14 +22,13 @@ router.post('/signup', async (req, res) => {
         }
     } catch (e) {
         console.log(e)
-        res.send({ error: e.message })
+        res.status(500).send({ error: e.message })
     }
 })
 
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body
-        // validate
         if (!username || !password) {
             return res.status(400).send({ msg: 'Not all fields have been entered' })
         }
@@ -43,7 +45,7 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 86400 })
         res.send({
             token: `Bearer ${token}`,
-            user_id: user._id
+            userId: user._id
         })
     } catch (e) {
         console.log(e)
