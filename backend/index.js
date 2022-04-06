@@ -1,5 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
+import http from 'http'
+import { Server } from 'socket.io'
 import accountRouter from './routes/account.js'
 
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/test'
@@ -8,8 +10,10 @@ mongoose.connect(MONGO_URI, {
     useUnifiedTopology: true
 })
 
-const app = express()
 const port = process.env.PORT || 3000
+const app = express()
+const server = http.createServer(app)
+const io = new Server(server)
 
 app.use(express.json())
 app.use((req, res, next) => {
