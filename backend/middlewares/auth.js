@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose'
 
 const auth = (req, res, next) => {
     try {
@@ -10,7 +11,7 @@ const auth = (req, res, next) => {
         if (!verified) {
             return res.status(401).json({ msg: 'Token verification failed, authorization denied' })
         }
-        req.userId = verified.id
+        req.userId = mongoose.Types.ObjectId(verified.id)
         next()
     } catch (e) {
         console.log(e)

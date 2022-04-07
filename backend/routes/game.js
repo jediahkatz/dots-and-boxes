@@ -6,7 +6,6 @@ import User from '../models/user.js'
 const router = express.Router()
 
 router.post('/create', auth, async (req, res) => {
-    console.log('CREATE')
     try {
         const { rows, cols } = req.body
         if (!rows || !cols) {
@@ -65,9 +64,9 @@ router.post('/join/:id', auth, async (req, res) => {
 /**
  * Get the info about an ongoing game that this user is a part of.
  */
-router.get('/info', auth, async (req, res) => {
+router.get('/info/:id', auth, async (req, res) => {
     try {
-        const { gameId } = req.body
+        const { id: gameId } = req.params
         if (!gameId) {
             return res.status(400).send({ error: 'Missing game id' })
         }
@@ -76,14 +75,15 @@ router.get('/info', auth, async (req, res) => {
         if (!game) {
             return res.status(400).send({ error: 'Invalid game id' })
         }
-        const { rows, cols, player1, player2, completed } = game
-        if (completed) {
-            return res.status(400).send({ error: 'Game already completed' })
-        }
 
         const userId = req.userId
-        if (![player1, player2].includes(userId)) {
-            return res.status(400).send({ error: 'User is not in the game' })
+        const { rows, cols, player1, player2, completed } = game
+        if (!userId.equals(player1) && !userId.equals(player2)) {
+            return res.status(401).send({ error: 'User is not in the game' })
+        }
+
+        if (completed) {
+            return res.status(400).send({ error: 'Game already completed' })
         }
 
         const { username: player1Name } = await User.findById(player1)

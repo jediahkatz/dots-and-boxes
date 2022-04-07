@@ -44,7 +44,7 @@ router.post('/login', async (req, res) => {
         }
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 86400 })
         res.send({
-            token: `Bearer ${token}`,
+            token,
             userId: user._id
         })
     } catch (e) {

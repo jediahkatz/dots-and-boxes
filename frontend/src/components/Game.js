@@ -7,7 +7,13 @@ const Game = () => {
     const [gameInfo, setGameInfo] = useState({})
 
     const getGameInfo = async () => {
-        const res = await axios.post('/game/info', { gameId })
+        const res = await axios.get(
+            `/game/info/${gameId}`, 
+            { headers: {
+                'x-auth-token': sessionStorage.getItem('token'),
+                'content-type': 'application/json'
+            }}
+        )
         const { error, rows, cols, isPlayer1, player1, player2 } = res.data
         if (error) {
             return console.log(error)
@@ -17,11 +23,11 @@ const Game = () => {
 
     useEffect(() => {
         getGameInfo()
-    })
+    }, [setGameInfo])
 
     const { rows, cols, isPlayer1, player1, player2 } = gameInfo
     console.log(gameInfo)
-    
+
     if (!player1) {
         return (
             <div>

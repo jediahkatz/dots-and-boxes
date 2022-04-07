@@ -21,10 +21,11 @@ const Login = () => {
             <div>
                 <Button text='Login' onClick={async () => {
                     const res = await axios.post('/account/login', { username, password })
-                    const { error } = res.data
+                    const { error, token } = res.data
                     if (error) {
                         alert(error)
                     } else {
+                        sessionStorage.setItem('token', token)
                         navigate('/')
                     }
                 }}/>
