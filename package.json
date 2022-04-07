@@ -1,22 +1,19 @@
 {
+  "dependencies": {
+    "concurrently": "^7.1.0"
+  },
   "name": "cis197-project",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "type": "module",
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon backend/index.js"
+    "build": "cd frontend && npm run build",
+    "server": "cd backend && npm run start",
+    "dev": "concurrently --kill-others \"npm run build\" \"npm run server\""
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "bcrypt": "^5.0.1",
-    "express": "^4.17.3",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.2.10",
-    "nodemon": "^2.0.15",
-    "socket.io": "^4.4.1"
-  }
+  "description": "",
+  "proxy": "http://localhost:3000"
 }

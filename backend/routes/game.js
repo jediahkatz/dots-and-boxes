@@ -1,6 +1,7 @@
 import express from 'express'
 import Game from '../models/game.js'
 import auth from '../middlewares/auth.js'
+import User from '../models/user.js'
 
 const router = express.Router()
 
@@ -8,7 +9,7 @@ router.post('/create', auth, async (req, res) => {
     try {
         const { rows, cols } = req.body
         if (!rows || !cols) {
-            return res.status(400).send({ msg: 'Not all fields have been entered' })
+            return res.status(400).send({ error: 'Not all fields have been entered' })
         }
         const userId = req.userId
         const game = await Game.create({
@@ -30,7 +31,7 @@ router.post('/join/:id', auth, async (req, res) => {
     try {
         const { id: gameId } = req.params
         if (!gameId) {
-            return res.status(400).send({ msg: 'Missing game id' })
+            return res.status(400).send({ error: 'Missing game id' })
         }
         // Race condition: 
         //   - A calls /join, sees game is empty
@@ -48,12 +49,69 @@ router.post('/join/:id', auth, async (req, res) => {
             { player2: userId }
         )
         if (!game) {
-            return res.status(400).send({ msg: 'Invalid or already full game id' })
+            return res.status(400).send({ error: 'Invalid or already full game id' })
         }
-        res.send({ 
+        res.send({
             msg: `Successfully joined game`,
             gameId
         })
+    } catch (e) {
+        console.log(e)
+        res.status(500).send({ error: e.message })
+    }
+})
+
+/**
+ * Get the info about an ongoing game that this user is a part of.
+ */
+router.get('/info', auth, async (req, res) => {
+    try {
+        const { gameId } = req.body
+        if (!gameId) {
+            return res.status(400).send({ error: 'Missing game id' })
+        }
+
+        const game = await Game.findById(gameId)
+        if (!game) {
+            return res.status(400).send({ error: 'Invalid game id' })
+        }
+        const { rows, cols, player1, player2, completed } = game
+        if (completed) {
+            return res.status(400).send({ error: 'Game already completed' })
+        }
+
+        const userId = req.userId
+        if (![player1, player2].includes(userId)) {
+            return res.status(400).send({ error: 'User is not in the game' })
+        }
+
+        const { username: player1Name } = await User.findById(player1)
+        if (!player2) {
+            res.send({
+                rows,
+                cols,
+                isPlayer1: true,
+                player1: {
+                    id: player1,
+                    username: player1Name
+                }
+            })
+        } else {
+            const { username: player2Name } = await User.findById(player2)
+            res.send({
+                rows,
+                cols,
+                isPlayer1: userId === player1,
+                player1: {
+                    id: player1,
+                    username: player1Name
+                },
+                player2: {
+                    id: player2,
+                    username: player2Name
+                }
+            })
+        }
     } catch (e) {
         console.log(e)
         res.status(500).send({ error: e.message })

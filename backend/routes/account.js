@@ -10,7 +10,7 @@ router.post('/signup', async (req, res) => {
     try {
         const { username, password } = req.body
         if (!username || !password) {
-            return res.status(400).send({ msg: 'Not all fields have been entered' })
+            return res.status(400).send({ error: 'Not all fields have been entered' })
         }
         if (await User.findOne({ username })) {
             res.status(400).send({ error: 'User with that name already exists' })
@@ -30,17 +30,17 @@ router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body
         if (!username || !password) {
-            return res.status(400).send({ msg: 'Not all fields have been entered' })
+            return res.status(400).send({ error: 'Not all fields have been entered' })
         }
         const user = await User.findOne({ username })
         if (!user) {
             return res
             .status(400)
-            .send({ msg: 'Invalid credentials' })
+            .send({ error: 'Invalid credentials' })
         }
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) {
-            return res.status(400).send({ msg: 'Invalid credentials' })
+            return res.status(400).send({ error: 'Invalid credentials' })
         }
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 86400 })
         res.send({
