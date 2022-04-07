@@ -6,6 +6,7 @@ import User from '../models/user.js'
 const router = express.Router()
 
 router.post('/create', auth, async (req, res) => {
+    console.log('CREATE')
     try {
         const { rows, cols } = req.body
         if (!rows || !cols) {

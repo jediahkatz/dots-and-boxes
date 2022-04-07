@@ -1,8 +1,10 @@
 import express from 'express'
+import cors from 'cors'
 import mongoose from 'mongoose'
 import http from 'http'
 import { Server } from 'socket.io'
 import accountRouter from './routes/account.js'
+import gameRouter from './routes/game.js'
 
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/test'
 mongoose.connect(MONGO_URI, {
@@ -16,13 +18,10 @@ const server = http.createServer(app)
 const io = new Server(server)
 
 app.use(express.json())
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  next()
-})
+app.use(cors())
 
 app.use('/account', accountRouter)
+app.use('/game', gameRouter)
 
 app.use((err, req, res, next) => {
     if (res.headersSent) {

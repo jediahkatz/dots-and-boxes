@@ -12,7 +12,6 @@ const App = () => {
   return (
     <Router>
       <div>
-        <p>yo</p>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/game/:id" element={<Game />} />
