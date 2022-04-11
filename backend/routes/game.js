@@ -92,10 +92,7 @@ router.get('/info/:id', auth, async (req, res) => {
                 rows,
                 cols,
                 isPlayer1: true,
-                player1: {
-                    id: player1,
-                    username: player1Name
-                }
+                player1Name
             })
         } else {
             const { username: player2Name } = await User.findById(player2)
@@ -103,14 +100,8 @@ router.get('/info/:id', auth, async (req, res) => {
                 rows,
                 cols,
                 isPlayer1: userId === player1,
-                player1: {
-                    id: player1,
-                    username: player1Name
-                },
-                player2: {
-                    id: player2,
-                    username: player2Name
-                }
+                player1Name,
+                player2Name
             })
         }
     } catch (e) {
