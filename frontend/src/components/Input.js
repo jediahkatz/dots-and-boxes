@@ -1,6 +1,6 @@
 const Input = ({ value, setInput }) => (
     <div>
-        <input type="text" value={value} onChange={e => setInput(e.target.value)} />
+        <input type='text' value={value} onChange={e => setInput(e.target.value)} />
     </div>
 )
   

@@ -12,7 +12,7 @@ const GameBoard = ({
     clickVLine
 }) => {
     return (
-        <div class="columns">
+        <div class='columns'>
             {/* {
                 Array.
             }             */}

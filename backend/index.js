@@ -5,6 +5,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import accountRouter from './routes/account.js'
 import gameRouter from './routes/game.js'
+import { handleJoinRoom } from './gameserver/gameserver.js'
 
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/test'
 mongoose.connect(MONGO_URI, {
@@ -15,8 +16,14 @@ mongoose.connect(MONGO_URI, {
 const port = process.env.PORT || 3000
 const app = express()
 const server = http.createServer(app)
-const io = new Server(server)
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:3001',
+        methods: ['GET', 'POST']
+    }
+})
 
+io.on('connection', handleJoinRoom)
 app.use(express.json())
 app.use(cors())
 
@@ -34,6 +41,6 @@ app.get('/favicon.ico', (req, res) => {
     res.status(404).send()
 })
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server running on port ${port}`)
 })

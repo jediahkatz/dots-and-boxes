@@ -9,8 +9,8 @@ const Home = () => {
             '/game/create', 
             { rows: 3, cols: 3 }, 
             { headers: {
-                "x-auth-token": sessionStorage.getItem('token'),
-                "content-type": "application/json"
+                'x-auth-token': sessionStorage.getItem('token'),
+                'content-type': 'application/json'
             }}
         )
         const { error, gameId } = res.data

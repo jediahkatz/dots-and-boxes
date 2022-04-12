@@ -1,5 +1,5 @@
 const Button = ({ text, onClick }) => (
-    <button className="button" type="button" onClick={onClick}>
+    <button className='button' type='button' onClick={onClick}>
         {text}
     </button>
 )

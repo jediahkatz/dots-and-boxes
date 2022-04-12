@@ -39,12 +39,13 @@ const Game = () => {
             setVLines([...Array(rows)].map(_ => Array(cols+1).fill(OWNER.NO_ONE)))
     
             const socket = io('http://localhost:3000')
-            socket.on('connection', socket => { 
-                socket.emit(MSG_TYPE.JOIN_ROOM, { room: gameId })
-                socket.emit(MSG_TYPE.PLAYER_JOINED, { 
-                    username: isPlayer1 ? player1Name : player2Name
-                })
+            // socket.on('connection', socket => {
+                // console.log('new socket!')
+            socket.emit(MSG_TYPE.JOIN_ROOM, { room: gameId })
+            socket.emit(MSG_TYPE.PLAYER_JOINED, { 
+                username: isPlayer1 ? player1Name : player2Name
             })
+            // })
             socket.on(MSG_TYPE.PLAYER_JOINED, ({ username, isPlayer1 }) => {
                 if (!isPlayer1) {
                     setPlayer2Name(username)
