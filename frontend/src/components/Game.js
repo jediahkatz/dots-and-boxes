@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { OWNER, MSG_TYPE } from '../shared/constants'
+import { OWNER, MSG_TYPE } from '../shared/constants.js'
 import { io } from 'socket.io-client'
-import GameBoard from './GameBoard'
+import GameBoard from './GameBoard.js'
 
 const Game = () => {
     const { id: gameId } = useParams()
@@ -39,15 +39,14 @@ const Game = () => {
             setVLines([...Array(rows)].map(_ => Array(cols+1).fill(OWNER.NO_ONE)))
     
             const socket = io('http://localhost:3000')
-            // socket.on('connection', socket => {
-                // console.log('new socket!')
             socket.emit(MSG_TYPE.JOIN_ROOM, { room: gameId })
-            socket.emit(MSG_TYPE.PLAYER_JOINED, { 
-                username: isPlayer1 ? player1Name : player2Name
+            socket.emit(MSG_TYPE.PLAYER_JOINED, {
+                room: gameId,
+                isPlayer1,
+                username: isPlayer1 ? player1Name : player2Name,
             })
-            // })
             socket.on(MSG_TYPE.PLAYER_JOINED, ({ username, isPlayer1 }) => {
-                if (!isPlayer1) {
+                if (!isPlayer1 && !player2Name) {
                     setPlayer2Name(username)
                 }
             })
@@ -85,7 +84,7 @@ const Game = () => {
             return
         }
         setClickCooldown(true)
-        socket.emit(MSG_TYPE.CLICK_HORIZONTAL, { row, col })
+        socket.emit(MSG_TYPE.CLICK_HORIZONTAL, { room: gameId, row, col })
     }
 
     /**
@@ -103,7 +102,7 @@ const Game = () => {
             return
         }
         setClickCooldown(true)
-        socket.emit(MSG_TYPE.CLICK_VERTICAL, { row, col })
+        socket.emit(MSG_TYPE.CLICK_VERTICAL, { room: gameId, row, col })
     }
 
     if (!player1Name) {
@@ -124,6 +123,7 @@ const Game = () => {
 
     return (
         <div>
+            {player1Name} vs {player2Name}
             <GameBoard 
                 rows={rows}
                 cols={cols}

@@ -5,7 +5,8 @@ import http from 'http'
 import { Server } from 'socket.io'
 import accountRouter from './routes/account.js'
 import gameRouter from './routes/game.js'
-import { handleJoinRoom } from './gameserver/gameserver.js'
+import gameServer from './gameserver/gameserver.js'
+import { MSG_TYPE } from '../frontend/src/shared/constants.js'
 
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/test'
 mongoose.connect(MONGO_URI, {
@@ -23,7 +24,8 @@ const io = new Server(server, {
     }
 })
 
-io.on('connection', handleJoinRoom)
+io.on('connection', gameServer(io))
+
 app.use(express.json())
 app.use(cors())
 

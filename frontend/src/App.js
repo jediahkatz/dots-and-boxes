@@ -4,9 +4,10 @@ import {
   Route,
   Routes,
 } from 'react-router-dom'
-import Game from './components/Game'
-import Home from './components/Home'
-import Login from './components/Login'
+import Game from './components/Game.js'
+import Home from './components/Home.js'
+import Login from './components/Login.js'
+import JoinGame from './components/JoinGame.js'
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <div>
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/join/:id' element={<JoinGame />} />
           <Route path='/game/:id' element={<Game />} />
           {/* <Route path='/signup' element={<Signup/>} /> */}
           <Route path='/login' element={<Login />} />

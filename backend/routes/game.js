@@ -99,7 +99,7 @@ router.get('/info/:id', auth, async (req, res) => {
             res.send({
                 rows,
                 cols,
-                isPlayer1: userId === player1,
+                isPlayer1: userId.equals(player1),
                 player1Name,
                 player2Name
             })
