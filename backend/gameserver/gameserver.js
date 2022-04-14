@@ -14,6 +14,8 @@ const handleJoinRoom = (_io, socket) => ({ room }) => {
             isPlayer1Turn: true
         }
     }
+    const { hLines, vLines, isPlayer1Turn } = games[room]
+    socket.emit(MSG_TYPE.JOIN_ROOM, { hLines, vLines, isPlayer1Turn })
 }
 
 const handlePlayerJoined = (io, _socket) => ({ room, username, isPlayer1 }) => {
@@ -22,6 +24,7 @@ const handlePlayerJoined = (io, _socket) => ({ room, username, isPlayer1 }) => {
 }
 
 const handleClickHorizontal = (io, _socket) => ({ room, row, col }) => {
+    console.log(`click horizontal: ${room} (${row}, ${col})`)
     if (!(room in games)) {
         throw Error('Game does not exist!')
     }
@@ -32,6 +35,7 @@ const handleClickHorizontal = (io, _socket) => ({ room, row, col }) => {
 }
 
 const handleClickVertical = (io, _socket) => ({ room, row, col }) => {
+    console.log(`click vertical: ${room} (${row}, ${col})`)
     if (!(room in games)) {
         throw Error('Game does not exist!')
     }
@@ -42,6 +46,7 @@ const handleClickVertical = (io, _socket) => ({ room, row, col }) => {
 }
 
 const gameServer = io => socket => {
+    console.log('adding listeners?')
     socket.on(MSG_TYPE.JOIN_ROOM, handleJoinRoom(io, socket))
     socket.on(MSG_TYPE.PLAYER_JOINED, handlePlayerJoined(io, socket))
     socket.on(MSG_TYPE.CLICK_HORIZONTAL, handleClickHorizontal(io, socket))
