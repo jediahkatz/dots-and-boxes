@@ -5,6 +5,8 @@ const games = {}
 const handleJoinRoom = (_io, socket) => ({ room }) => {
     console.log('joining room ' + room)
     socket.join(room)
+    const rows = 3
+    const cols = 3
     if (!(room in games)) {
         games[room] = { 
             hLines: [...Array(rows+1)].map(_ => Array(cols).fill(OWNER.NO_ONE)),

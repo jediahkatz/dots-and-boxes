@@ -128,7 +128,8 @@ const Game = () => {
                 rows={rows}
                 cols={cols}
                 hLines={hLines} 
-                vLines={vLines} 
+                vLines={vLines}
+                isPlayer1={isPlayer1}
                 canClick={isMyTurn() && !clickCooldown} 
                 clickHLine={clickHLine}
                 clickVLine={clickVLine}
