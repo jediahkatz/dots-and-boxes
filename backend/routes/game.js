@@ -42,7 +42,9 @@ router.post('/join/:id', auth, async (req, res) => {
         const userId = req.userId
         const game = await Game.findOneAndUpdate(
             { 
-                _id: gameId, 
+                _id: gameId,
+                // don't join this game twice
+                player1: { $ne: userId },
                 // will only succeed if a player2 has not joined already
                 player2: { $exists: false }
             },

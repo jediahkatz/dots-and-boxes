@@ -168,7 +168,7 @@ const GameBoard = ({
             <VRow vLines={vLines} hLines={hLines} boxes={boxes} clickVLine={doClickVLine} cols={cols} rowIndex={i} isPlayer1={isPlayer1} />
           </React.Fragment>
         ))}
-      <HRow hLines={hLines} clickHLine={clickHLine} cols={cols} rowIndex={rows} isPlayer1={isPlayer1} />
+      <HRow hLines={hLines} clickHLine={doClickHLine} cols={cols} rowIndex={rows} isPlayer1={isPlayer1} />
     </div>
   )
 }

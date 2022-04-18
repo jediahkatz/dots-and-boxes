@@ -8,8 +8,8 @@ const gameSchema = new Schema(
         cols: { type: Number, required: true, min: 2, max: 6 },
         player1: { type: Schema.Types.ObjectId, ref: 'User' },
         player2: { type: Schema.Types.ObjectId, ref: 'User' },
-        player1_boxes: { type: Number, required: true, default: 0 },
-        player2_boxes: { type: Number, required: true, default: 0 },
+        player1BoxCount: { type: Number, required: true, default: 0 },
+        player2BoxCount: { type: Number, required: true, default: 0 },
         completed: { type: Boolean, required: true, default: false },
     },
     { timestamps: true }

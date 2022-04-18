@@ -1,4 +1,6 @@
 import { MSG_TYPE, OWNER } from '../../frontend/src/shared/constants.js'
+import Game from '../models/game.js'
+import User from '../models/user.js'
 
 const games = {}
 
@@ -31,6 +33,46 @@ const isBoxCaptured = ({ row, col, hLines, vLines }) => (
     vLines[row][col+1] !== OWNER.NO_ONE
 )
 
+const isGameCompleted = ({ boxes }) => {
+    const allBoxes = boxes.flat()
+    const player1BoxCount = allBoxes.filter(owner => owner === OWNER.PLAYER_1).length
+    const player2BoxCount = allBoxes.filter(owner => owner === OWNER.PLAYER_2).length
+
+    let winner = null
+    if (player1BoxCount * 2 > allBoxes.length) {
+        winner = OWNER.PLAYER_1
+    } else if (player2BoxCount * 2 > allBoxes.length) {
+        winner = OWNER.PLAYER_2
+    } else if (player1BoxCount + player2BoxCount === allBoxes.length) {
+        winner = OWNER.NO_ONE
+    }
+    return { completed: winner !== null, winner, player1BoxCount, player2BoxCount }
+}
+
+const setGameCompleted = async ({ gameId, winner, player1BoxCount, player2BoxCount }) => {
+    console.log('game over!')
+    const game = await Game.findById(gameId)
+    game.completed = true
+    game.player1BoxCount = player1BoxCount
+    game.player2BoxCount = player2BoxCount
+    game.save()
+
+    const player1 = await User.findById(game.player1)
+    const player2 = await User.findById(game.player2)
+    if (winner === OWNER.PLAYER_1) {
+        player1.wins += 1
+        player2.losses += 1
+    } else if (winner === OWNER.PLAYER_2) {
+        player1.losses += 1
+        player2.wins += 1
+    } else {
+        player1.draws += 1
+        player2.draws += 1
+    }
+    player1.save()
+    player2.save()
+}
+
 const handleClickHorizontal = (io, _socket) => ({ room, row, col }) => {
     console.log(`click horizontal: ${room} (${row}, ${col})`)
     if (!(room in games)) {
@@ -44,6 +86,11 @@ const handleClickHorizontal = (io, _socket) => ({ room, row, col }) => {
     }
     if (row-1 >= 0 && isBoxCaptured({ row: row-1, col, hLines, vLines })) {
         boxes[row-1][col] = owner
+    }
+    const { completed, winner, player1BoxCount, player2BoxCount } = isGameCompleted({ boxes })
+    console.log({ completed, winner, player1BoxCount, player2BoxCount })
+    if (completed) {
+        setGameCompleted({ gameId: room, winner, player1BoxCount, player2BoxCount })
     }
     games[room].isPlayer1Turn = !isPlayer1Turn
     io.to(room).emit(MSG_TYPE.CLICK_HORIZONTAL, { hLines, boxes, isPlayer1Turn: games[room].isPlayer1Turn })

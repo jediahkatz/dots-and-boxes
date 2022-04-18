@@ -18,7 +18,6 @@ const Home = () => {
         if (error) {
             return console.log(error)
         }
-        console.log(gameId)
         navigate(`/game/${gameId}`)
     }
 
