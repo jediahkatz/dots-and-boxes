@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { MSG_TYPE } from '../shared/constants.js'
+import { MSG_TYPE, OWNER } from '../shared/constants.js'
 import { io } from 'socket.io-client'
 import GameBoard from './GameBoard.js'
 
@@ -15,6 +15,7 @@ const Game = () => {
     const [clickCooldown, setClickCooldown] = useState(false)
     const [hLines, setHLines] = useState([])
     const [vLines, setVLines] = useState([])
+    const [boxes, setBoxes] = useState([])
 
     useEffect(() => {
         const getGameInfo = async () => {
@@ -29,7 +30,6 @@ const Game = () => {
             if (error) {
                 return console.log(error)
             }
-            console.log('this is happening??')
             setGameInfo({
                 rows, cols, isPlayer1
             })
@@ -42,9 +42,10 @@ const Game = () => {
                 isPlayer1,
                 username: isPlayer1 ? p1Name : p2Name,
             })
-            socket.on(MSG_TYPE.JOIN_ROOM, ({ hLines, vLines, isPlayer1Turn }) => {
+            socket.on(MSG_TYPE.JOIN_ROOM, ({ hLines, vLines, boxes, isPlayer1Turn }) => {
                 setHLines(hLines)
                 setVLines(vLines)
+                setBoxes(boxes)
                 setIsPlayer1Turn(isPlayer1Turn)
             })
             socket.on(MSG_TYPE.PLAYER_JOINED, ({ username, isPlayer1 }) => {
@@ -52,15 +53,17 @@ const Game = () => {
                     setPlayer2Name(username)
                 }
             })
-            socket.on(MSG_TYPE.CLICK_HORIZONTAL, ({ hLines: newHLines, newIsPlayer1Turn }) => {
+            socket.on(MSG_TYPE.CLICK_HORIZONTAL, ({ hLines: newHLines, boxes: newBoxes, isPlayer1Turn: newIsPlayer1Turn }) => {
                 console.log('newHLines', newHLines, 'newIsPlayer1Turn', newIsPlayer1Turn)
                 setHLines(newHLines)
+                setBoxes(newBoxes)
                 setIsPlayer1Turn(newIsPlayer1Turn)
                 setClickCooldown(false)
             })
-            socket.on(MSG_TYPE.CLICK_VERTICAL, ({ vLines: newVLines, newIsPlayer1Turn }) => {
+            socket.on(MSG_TYPE.CLICK_VERTICAL, ({ vLines: newVLines, boxes: newBoxes, isPlayer1Turn: newIsPlayer1Turn }) => {
                 console.log('newVLines', newVLines, 'newIsPlayer1Turn', newIsPlayer1Turn)
                 setVLines(newVLines)
+                setBoxes(newBoxes)
                 setIsPlayer1Turn(newIsPlayer1Turn)
                 setClickCooldown(false)
             })
@@ -77,7 +80,6 @@ const Game = () => {
      * The current player clicks on a horizontal line.
      */
     const clickHLine = (row, col) => {
-        console.log('turn?', isPlayer1, isPlayer1Turn, isMyTurn())
         if (!isMyTurn()) {
             throw Error('Not your turn')
         }
@@ -110,7 +112,7 @@ const Game = () => {
         socket.emit(MSG_TYPE.CLICK_VERTICAL, { room: gameId, row, col })
     }
     
-    if (!player1Name || !hLines || hLines.length === 0 || !vLines || vLines.length === 0) {
+    if (!player1Name || !hLines || hLines.length === 0 || !vLines || vLines.length === 0 || !boxes || boxes.length === 0) {
         return (
             <div>
                 Loading!...
@@ -125,6 +127,9 @@ const Game = () => {
             </div>
         )
     }
+
+    const player1BoxCount = boxes.flat().filter(owner => owner === OWNER.PLAYER_1).length
+    const player2BoxCount = boxes.flat().filter(owner => owner === OWNER.PLAYER_2).length
 
     return (
         <div>
@@ -145,11 +150,17 @@ const Game = () => {
                     cols={cols}
                     hLines={hLines} 
                     vLines={vLines}
+                    boxes={boxes}
                     isPlayer1={isPlayer1}
                     canClick={isMyTurn() && !clickCooldown} 
                     clickHLine={clickHLine}
                     clickVLine={clickVLine}
                 />
+            </div>
+            <div>
+                <p>{isPlayer1Turn ? player1Name : player2Name}'s turn!</p>
+                <p>{player1Name} controls {player1BoxCount} boxes</p>
+                <p>{player2Name} controls {player2BoxCount} boxes</p>
             </div>
         </div>
     )

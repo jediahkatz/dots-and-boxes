@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { OWNER } from '../shared/constants.js'
 
 const FINAL_BLUE = '#00B4D8'
-const HOVER_BLUE = '#90E0EF'
+const HOVER_BLUE = '#C8F0F7'
 const FINAL_PINK = '#E36397'
 const HOVER_PINK = '#FEEAFA'
 const WHITE = '#FFFFFF'
@@ -20,10 +20,10 @@ const Dot = () => (
   />
 )
 
-const HLine = ({ hLines, clickHLine, row, col, isPlayer1 }) => {
+const HLine = ({ owner, clickHLine, row, col, isPlayer1 }) => {
   const lineColor = 
-    (hLines[row][col] === OWNER.PLAYER_1) ? FINAL_BLUE :
-    (hLines[row][col] === OWNER.PLAYER_2) ? FINAL_PINK :
+    (owner === OWNER.PLAYER_1) ? FINAL_BLUE :
+    (owner === OWNER.PLAYER_2) ? FINAL_PINK :
     WHITE
   const hoverColor = isPlayer1 ? HOVER_BLUE : HOVER_PINK
   const [color, setColor] = useState(lineColor)
@@ -68,20 +68,22 @@ const HRow = ({ hLines, clickHLine, cols, rowIndex, isPlayer1 }) => (
       .map((_, colIndex) => (
         <React.Fragment key={`hl-${rowIndex}-${colIndex}`} >
           <Dot />
-          <HLine hLines={hLines} clickHLine={clickHLine} row={rowIndex} col={colIndex} isPlayer1={isPlayer1} />
+          <HLine owner={hLines[rowIndex][colIndex]} clickHLine={clickHLine} row={rowIndex} col={colIndex} isPlayer1={isPlayer1} />
         </React.Fragment>
       ))}
     <Dot />
   </div>
 )
 
-const VLine = ({ vLines, clickVLine, row, col, isPlayer1 }) => {
+const VLine = ({ owner, clickVLine, row, col, isPlayer1 }) => {
   const lineColor = 
-    (vLines[row][col] === OWNER.PLAYER_1) ? FINAL_BLUE :
-    (vLines[row][col] === OWNER.PLAYER_2) ? FINAL_PINK :
+    (owner === OWNER.PLAYER_1) ? FINAL_BLUE :
+    (owner === OWNER.PLAYER_2) ? FINAL_PINK :
     WHITE
   const hoverColor = isPlayer1 ? HOVER_BLUE : HOVER_PINK
   const [color, setColor] = useState(lineColor)
+
+  useEffect(() => setColor(lineColor), [lineColor])
 
   return (
     <div
@@ -102,11 +104,18 @@ const VLine = ({ vLines, clickVLine, row, col, isPlayer1 }) => {
   )
 }
 
-const Box = () => (
-  <div style={{ height: '65px', width: '50px', backgroundColor: 'white' }} />
-)
+const Box = ({ owner }) => {
+  const lineColor = 
+    (owner === OWNER.PLAYER_1) ? HOVER_BLUE :
+    (owner === OWNER.PLAYER_2) ? HOVER_PINK :
+    WHITE
 
-const VRow = ({ vLines, clickVLine, cols, rowIndex, isPlayer1 }) => (
+  return (
+    <div style={{ height: '65px', width: '50px', backgroundColor: lineColor }} />
+  )
+}
+
+const VRow = ({ vLines, boxes, clickVLine, cols, rowIndex, isPlayer1 }) => (
   <div
     className='row'
     style={{
@@ -121,19 +130,20 @@ const VRow = ({ vLines, clickVLine, cols, rowIndex, isPlayer1 }) => (
       .fill(null)
       .map((_, colIndex) => (
         <React.Fragment key={`vl-${rowIndex}-${colIndex}`}>
-          <VLine vLines={vLines} clickVLine={clickVLine} row={rowIndex} col={colIndex} isPlayer1={isPlayer1} />
-          <Box />
+          <VLine owner={vLines[rowIndex][colIndex]} clickVLine={clickVLine} row={rowIndex} col={colIndex} isPlayer1={isPlayer1} />
+          <Box owner={boxes[rowIndex][colIndex]} />
         </React.Fragment>
       ))}
-    <VLine vLines={vLines} clickVLine={clickVLine} row={rowIndex} col={cols} isPlayer1={isPlayer1} />
+    <VLine owner={vLines[rowIndex][cols]} clickVLine={clickVLine} row={rowIndex} col={cols} isPlayer1={isPlayer1} />
   </div>
 )
 
-const GameBoard = ({
+const GameBoard = ({ 
   rows,
   cols,
   hLines,
   vLines,
+  boxes,
   isPlayer1,
   canClick,
   clickHLine,
@@ -155,7 +165,7 @@ const GameBoard = ({
         .map((_, i) => (
           <React.Fragment key={`rows-${i}`}>
             <HRow hLines={hLines} clickHLine={doClickHLine} cols={cols} rowIndex={i} isPlayer1={isPlayer1} />
-            <VRow vLines={vLines} clickVLine={doClickVLine} cols={cols} rowIndex={i} isPlayer1={isPlayer1} />
+            <VRow vLines={vLines} hLines={hLines} boxes={boxes} clickVLine={doClickVLine} cols={cols} rowIndex={i} isPlayer1={isPlayer1} />
           </React.Fragment>
         ))}
       <HRow hLines={hLines} clickHLine={clickHLine} cols={cols} rowIndex={rows} isPlayer1={isPlayer1} />

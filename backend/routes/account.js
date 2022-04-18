@@ -16,7 +16,6 @@ router.post('/signup', async (req, res) => {
             res.status(400).send({ error: 'User with that name already exists' })
         } else {
             const passwordHash = await bcrypt.hash(password, 10)
-            console.log(username, passwordHash)
             await User.create({ username, password: passwordHash })
             res.send({ msg: 'Successfully created user' })
         }
