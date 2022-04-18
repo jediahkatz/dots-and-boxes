@@ -128,17 +128,29 @@ const Game = () => {
 
     return (
         <div>
-            {player1Name} vs {player2Name}
-            <GameBoard 
-                rows={rows}
-                cols={cols}
-                hLines={hLines} 
-                vLines={vLines}
-                isPlayer1={isPlayer1}
-                canClick={isMyTurn() && !clickCooldown} 
-                clickHLine={clickHLine}
-                clickVLine={clickVLine}
-            />
+            <span style={{ display: 'flex', alignItems: 'center' }}>
+                <h2 className='title is-2'>
+                    {player1Name}
+                </h2> 
+                <p>
+                &nbsp;vs&nbsp;
+                </p>
+                <h2 className='title is-2'>
+                    {player2Name}
+                </h2> 
+            </span>
+            <div>
+                <GameBoard
+                    rows={rows}
+                    cols={cols}
+                    hLines={hLines} 
+                    vLines={vLines}
+                    isPlayer1={isPlayer1}
+                    canClick={isMyTurn() && !clickCooldown} 
+                    clickHLine={clickHLine}
+                    clickVLine={clickVLine}
+                />
+            </div>
         </div>
     )
 }
