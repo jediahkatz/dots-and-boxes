@@ -4,9 +4,12 @@ import { useParams } from 'react-router-dom'
 import { MSG_TYPE, OWNER } from '../shared/constants.js'
 import { io } from 'socket.io-client'
 import GameBoard from './GameBoard.js'
-import { Divider, Space, Card } from 'antd'
-import { FireFilled, FireOutlined, FireTwoTone } from '@ant-design/icons';
+import { Divider, Space, Card, message } from 'antd'
+import Button from './Button.js'
+import { FireFilled, FireOutlined, FireTwoTone, CopyOutlined } from '@ant-design/icons';
 import { FINAL_PINK, FINAL_BLUE } from '../shared/constants.js'
+
+const BASE_URL = 'http://localhost:3001'
 
 const Game = () => {
     const { id: gameId } = useParams()
@@ -137,9 +140,19 @@ const Game = () => {
     if (!player2Name) {
         const url = `/join/${gameId}`
         return (
-            <div>
-                <p>Waiting for player 2...</p>
-                <p>Invite them to join with this link: <a href={url} >Join Game</a></p>
+            <div className='blue-bg center-box-layout'>
+                <Card style={{ textAlign: 'center' }}>
+                    <h2>Waiting for player 2...</h2>
+                    <br />
+                    <p>Invite them to join with this link:</p>
+                    <Button icon={<CopyOutlined />} 
+                        text="Copy Link" 
+                        onClick={() => {
+                            navigator.clipboard.writeText(BASE_URL + url)
+                            message.success('Link copied!', 2)
+                        }}>
+                    </Button>
+                </Card>
             </div>
         )
     }

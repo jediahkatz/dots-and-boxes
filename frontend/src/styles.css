@@ -1,3 +1,11 @@
+.home-bg {
+    background-color: #C8F0F7;
+    opacity: 0.8;
+    background-image: repeating-linear-gradient(45deg, #FEEAFA 25%, transparent 25%, transparent 75%, #FEEAFA 75%, #FEEAFA), repeating-linear-gradient(45deg, #FEEAFA 25%, #C8F0F7 25%, #C8F0F7 75%, #FEEAFA 75%, #FEEAFA);
+    background-position: 0 0, 10px 10px;
+    background-size: 20px 20px;
+}
+
 .blue-bg {
     background-color: #C8F0F7;
     opacity: 0.8;

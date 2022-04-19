@@ -2,6 +2,7 @@ import axios from 'axios'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from './Button.js'
+import { Divider, Space, Card } from 'antd'
 
 const Home = () => {
     const navigate = useNavigate()
@@ -22,8 +23,20 @@ const Home = () => {
     }
 
     return (
-        <div>
-            <Button text='Create game' onClick={createGame}/>
+        <div className="home-bg center-box-layout">
+            <Card 
+                style={{ textAlign: 'center' }}
+                actions={[
+                    <a href='/signup'><div>Sign Up</div></a>,
+                    <a href='/login'><div>Log In</div></a>,
+                ]}
+            >
+                <div style={{ padding: '30px' }}>
+                    <h2>Dots and Boxes</h2>
+                    <br />
+                    <Button text='Create game' onClick={createGame}/>
+                </div>
+            </Card>
         </div>
     )
 }
