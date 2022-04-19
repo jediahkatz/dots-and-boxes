@@ -1,0 +1,22 @@
+.blue-bg {
+    background-color: #C8F0F7;
+    opacity: 0.8;
+    background-image: radial-gradient(#00B4D8 1px, transparent 1px), radial-gradient(#00B4D8 1px, #C8F0F7 1px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+}
+
+.pink-bg {
+    background-color: #FEEAFA;
+    opacity: 0.8;
+    background-image: radial-gradient(#E36397 1px, transparent 1px), radial-gradient(#E36397 1px, #FEEAFA 1px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+}
+
+.center-box-layout {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    padding: 15em 0;
+}

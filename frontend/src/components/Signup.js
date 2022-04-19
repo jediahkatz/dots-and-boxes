@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Button from './Button.js'
 import Input from './Input.js'
+import { Space, Card } from 'antd'
+import { FINAL_PINK } from '../shared/constants.js'
 
 const Signup = () => {
     const [username, setUsername] = useState('')
@@ -10,28 +12,31 @@ const Signup = () => {
     const navigate = useNavigate()
 
     return (
-        <div>
+        <div className="pink-bg center-box-layout">
             <div>
-                <h3 className='title is-3'>Sign Up</h3>
-                <p>Username:</p>
-                <Input value={username} setInput={setUsername} />
-                <p>Password:</p>
-                <Input value={password} setInput={setPassword} />
-                </div>
-            <div>
-                <Button text='Sign up' onClick={async () => {
-                    const res = await axios.post('/account/signup', { username, password })
-                    const { error } = res.data
-                    if (error) {
-                        alert(error)
-                    } else {
-                        navigate('/login')
-                    }
-                }}/>
-                <p>
-                    Already have an account?&nbsp;
-                    <Link to='/login' >Log in</Link>
-                </p>
+                <Card title="Sign Up" style={{textAlign: 'center'}}>
+                    <Space direction="vertical" size="large">
+                        <Space direction="vertical" size="middle">
+                            <Input label="Username" value={username} setInput={setUsername} />
+                            <Input label="Password" value={password} setInput={setPassword} />
+                        </Space>
+                        <Space direction="vertical" size="middle">
+                            <Button text='Sign Up' onClick={async () => {
+                                const res = await axios.post('/account/signup', { username, password })
+                                const { error } = res.data
+                                if (error) {
+                                    alert(error)
+                                } else {
+                                    navigate('/login')
+                                }
+                            }}/>
+                            <p>
+                                Already have an account?&nbsp;
+                                <Link to='/login' style={{ color: FINAL_PINK }}>Log In</Link>
+                            </p>
+                        </Space>
+                    </Space>
+                </Card>
             </div>
         </div>
     )

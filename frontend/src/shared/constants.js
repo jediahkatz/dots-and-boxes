@@ -1,3 +1,9 @@
+export const FINAL_BLUE = '#00B4D8'
+export const HOVER_BLUE = '#C8F0F7'
+export const FINAL_PINK = '#E36397'
+export const HOVER_PINK = '#FEEAFA'
+export const WHITE = '#FFFFFF'
+
 export const OWNER = Object.freeze({
     NO_ONE: 0,
     PLAYER_1: 1,

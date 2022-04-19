@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Button from './Button.js'
 import Input from './Input.js'
+import { Space, Card } from 'antd'
+import { FINAL_BLUE } from '../shared/constants.js'
 
 const Login = () => {
     const [username, setUsername] = useState('')
@@ -10,29 +12,32 @@ const Login = () => {
     const navigate = useNavigate()
 
     return (
-        <div>
+        <div className="blue-bg center-box-layout">
             <div>
-                <h3 className='title is-3'>Log In</h3>
-                <p>Username:</p>
-                <Input value={username} setInput={setUsername} />
-                <p>Password:</p>
-                <Input value={password} setInput={setPassword} />
-                </div>
-            <div>
-                <Button text='Login' onClick={async () => {
-                    const res = await axios.post('/account/login', { username, password })
-                    const { error, token } = res.data
-                    if (error) {
-                        alert(error)
-                    } else {
-                        sessionStorage.setItem('token', token)
-                        navigate('/')
-                    }
-                }}/>
-                <p>
-                    Don't have an account?&nbsp;
-                    <Link to='/signup' >Sign up</Link>
-                </p>
+                <Card title="Log In" style={{textAlign: 'center'}}>
+                    <Space direction="vertical" size="large">
+                        <Space direction="vertical" size="middle">
+                            <Input label="Username" value={username} setInput={setUsername} />
+                            <Input label="Password" value={password} setInput={setPassword} />
+                        </Space>
+                        <Space direction="vertical" size="middle">
+                            <Button text='Log In' onClick={async () => {
+                                const res = await axios.post('/account/login', { username, password })
+                                const { error, token } = res.data
+                                if (error) {
+                                    alert(error)
+                                } else {
+                                    sessionStorage.setItem('token', token)
+                                    navigate('/')
+                                }
+                            }}/>
+                            <p>
+                                Don't have an account?&nbsp;
+                                <Link style={{ color: FINAL_BLUE }} to='/signup' >Sign Up</Link>
+                            </p>
+                        </Space>
+                    </Space>
+                </Card>
             </div>
         </div>
     )

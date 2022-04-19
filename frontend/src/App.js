@@ -9,11 +9,13 @@ import Home from './components/Home.js'
 import Login from './components/Login.js'
 import Signup from './components/Signup.js'
 import JoinGame from './components/JoinGame.js'
+import 'antd/dist/antd.css';
+import "./styles.css"
 
 const App = () => {
   return (
     <Router>
-      <div>
+      <div style={{fontFamily: '\'Raleway\', sans-serif'}}>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/join/:id' element={<JoinGame />} />

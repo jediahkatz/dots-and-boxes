@@ -1,8 +1,22 @@
 import React from 'react'
+import { Input as AntInput } from 'antd'
 
-const Input = ({ value, setInput }) => (
+const Input = ({ label, value, setInput }) => (
     <div>
-        <input type='text' value={value} onChange={e => setInput(e.target.value)} />
+        {label === 'Password' ? 
+            <AntInput.Password 
+                type='text'
+                value={value} 
+                addonBefore={label}
+                onChange={e => setInput(e.target.value)} 
+            /> : 
+            <AntInput 
+                type='text'
+                value={value} 
+                addonBefore={label}
+                onChange={e => setInput(e.target.value)} 
+            />
+        }
     </div>
 )
   

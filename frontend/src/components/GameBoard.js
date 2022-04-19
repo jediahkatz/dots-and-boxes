@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { OWNER } from '../shared/constants.js'
-
-const FINAL_BLUE = '#00B4D8'
-const HOVER_BLUE = '#C8F0F7'
-const FINAL_PINK = '#E36397'
-const HOVER_PINK = '#FEEAFA'
-const WHITE = '#FFFFFF'
+import { 
+  OWNER, 
+  FINAL_BLUE, 
+  HOVER_BLUE, 
+  FINAL_PINK, 
+  HOVER_PINK, 
+  WHITE 
+} from '../shared/constants.js'
 
 const Dot = () => (
   <div
