@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom'
 import { MSG_TYPE, OWNER } from '../shared/constants.js'
 import { io } from 'socket.io-client'
 import GameBoard from './GameBoard.js'
+import { Divider, Space, Card } from 'antd'
+import { FireFilled, FireOutlined, FireTwoTone } from '@ant-design/icons';
+import { FINAL_PINK, FINAL_BLUE } from '../shared/constants.js'
 
 const Game = () => {
     const { id: gameId } = useParams()
@@ -152,44 +155,87 @@ const Game = () => {
     }
 
     return (
-        <div>
-            <span style={{ display: 'flex', alignItems: 'center' }}>
-                <h2 className='title is-2'>
-                    {player1Name}
-                </h2> 
-                <p>
-                &nbsp;vs&nbsp;
-                </p>
-                <h2 className='title is-2'>
-                    {player2Name}
-                </h2> 
-            </span>
+        <div className={isPlayer1 ? 'blue-bg center-box-layout' : 'pink-bg center-box-layout'}>
             <div>
-                <GameBoard
-                    rows={rows}
-                    cols={cols}
-                    hLines={hLines} 
-                    vLines={vLines}
-                    boxes={boxes}
-                    isPlayer1={isPlayer1}
-                    canClick={isMyTurn() && !clickCooldown && !isGameOver} 
-                    clickHLine={clickHLine}
-                    clickVLine={clickVLine}
-                />
-            </div>
-            <div>
-                {isGameOver ? (
-                    <GameOver 
-                        player1BoxCount={player1BoxCount}
-                        player2BoxCount={player2BoxCount}
-                        player1Name={player1Name}
-                        player2Name={player2Name}
-                    />
-                ) : (
-                    <p>{isPlayer1Turn ? player1Name : player2Name}'s turn!</p>
-                )}
-                <p>{player1Name} controls {player1BoxCount} boxes</p>
-                <p>{player2Name} controls {player2BoxCount} boxes</p>
+                <Card>
+                    <span className='game-title'>
+                        <h2 style={{ color: FINAL_BLUE, fontWeight: '700' }}>
+                            {player1Name}
+                        </h2> 
+                        <p>vs</p>
+                        <h2 style={{ color: FINAL_PINK, fontWeight: '700' }}>
+                            {player2Name}
+                        </h2> 
+                    </span>
+                    <div>
+                        <GameBoard
+                            rows={rows}
+                            cols={cols}
+                            hLines={hLines} 
+                            vLines={vLines}
+                            boxes={boxes}
+                            isPlayer1={isPlayer1}
+                            canClick={isMyTurn() && !clickCooldown && !isGameOver} 
+                            clickHLine={clickHLine}
+                            clickVLine={clickVLine}
+                        />
+                        <div style={{ textAlign: 'center' }}>
+                            {isGameOver ? (
+                                <GameOver 
+                                    player1BoxCount={player1BoxCount}
+                                    player2BoxCount={player2BoxCount}
+                                    player1Name={player1Name}
+                                    player2Name={player2Name}
+                                />
+                            ) : (
+                                <p>
+                                    { isPlayer1Turn ? 
+                                        <span style={{color: FINAL_BLUE, fontWeight: '700'}}>
+                                            {player1Name}
+                                        </span> : 
+                                        <span style={{color: FINAL_PINK, fontWeight: '700'}}>
+                                            {player2Name}
+                                        </span>
+                                    }
+                                    's turn!
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                        <Space direction='vertical' size='medium' align='center'>
+                            <div>
+                                <Divider plain><strong style={{ fontSize: '0.8em' }}>GAME STATUS</strong></Divider>
+                                <p>
+                                    { player1BoxCount > player2BoxCount ? 
+                                        <FireFilled style={{ color: FINAL_BLUE }}/> : 
+                                    player1BoxCount === player2BoxCount ? 
+                                        <FireTwoTone twoToneColor={FINAL_BLUE}/> :
+                                        <FireOutlined style={{ color: FINAL_BLUE }} />
+                                    }
+                                    {' '}
+                                    <span style={{color: FINAL_BLUE, fontWeight: '700'}}>
+                                        {player1Name}
+                                    </span> 
+                                    {' '}controls <strong>{player1BoxCount}</strong> boxes
+                                </p>
+                                <p>
+                                    { player2BoxCount > player1BoxCount ? 
+                                        <FireFilled style={{ color: FINAL_PINK }}/> : 
+                                    player2BoxCount === player1BoxCount ? 
+                                        <FireTwoTone twoToneColor={FINAL_PINK}/> :
+                                        <FireOutlined style={{ color: FINAL_PINK }} />
+                                    }
+                                    {' '}
+                                    <span style={{color: FINAL_PINK, fontWeight: '700'}}>
+                                        {player2Name}
+                                    </span>
+                                    {' '}controls <strong>{player2BoxCount}</strong> boxes
+                                </p>
+                            </div>
+                        </Space>
+                    </div>
+                </Card>
             </div>
         </div>
     )
@@ -198,12 +244,18 @@ const Game = () => {
 const GameOver = ({ player1BoxCount, player2BoxCount, player1Name, player2Name }) => {
     if (player1BoxCount > player2BoxCount) {
         return (
-            <p>{player1Name} wins!</p>
+            <p>
+                <span style={{color: FINAL_BLUE, fontWeight: '700'}}>{player1Name}</span>
+                {' '}wins!
+            </p>
         )
     }
     if (player2BoxCount > player1BoxCount) {
         return (
-            <p>{player2Name} wins!</p>
+            <p>
+                <span style={{color: FINAL_PINK, fontWeight: '700'}}>{player2Name}</span>
+                {' '}wins!
+            </p>
         )
     }
     return (

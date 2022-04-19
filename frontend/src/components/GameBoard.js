@@ -160,7 +160,7 @@ const GameBoard = ({
   }
 
   return (
-    <div className='columns' style={{ marginTop: '20px', width: '300px', height: '300px' }}>
+    <div className='columns' style={{ padding: '50px' }}>
       {Array(rows)
         .fill(null)
         .map((_, i) => (
