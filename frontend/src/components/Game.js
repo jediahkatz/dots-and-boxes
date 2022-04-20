@@ -1,12 +1,13 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { MSG_TYPE, OWNER } from '../shared/constants.js'
 import { io } from 'socket.io-client'
-import GameBoard from './GameBoard.js'
 import { Divider, Space, Card, message } from 'antd'
-import Button from './Button.js'
 import { FireFilled, FireOutlined, FireTwoTone, CopyOutlined } from '@ant-design/icons';
+import { useReward } from 'react-rewards'
+import { MSG_TYPE, OWNER } from '../shared/constants.js'
+import GameBoard from './GameBoard.js'
+import Button from './Button.js'
 import { FINAL_PINK, FINAL_BLUE } from '../shared/constants.js'
 
 const BASE_URL = 'http://localhost:3001'
@@ -169,6 +170,7 @@ const Game = () => {
 
     return (
         <div className={isPlayer1 ? 'blue-bg center-box-layout' : 'pink-bg center-box-layout'}>
+            <div id="animate"></div>
             <div>
                 <Card>
                     <span className='game-title'>
@@ -199,6 +201,7 @@ const Game = () => {
                                     player2BoxCount={player2BoxCount}
                                     player1Name={player1Name}
                                     player2Name={player2Name}
+                                    isPlayer1={isPlayer1}
                                 />
                             ) : (
                                 <p>
@@ -254,25 +257,57 @@ const Game = () => {
     )
 }
 
-const GameOver = ({ player1BoxCount, player2BoxCount, player1Name, player2Name }) => {
+const GameOver = ({ player1BoxCount, player2BoxCount, player1Name, player2Name, isPlayer1 }) => {    
+    let winner
+    let winnerColor
+    let reward
+
     if (player1BoxCount > player2BoxCount) {
-        return (
-            <p>
-                <span style={{color: FINAL_BLUE, fontWeight: '700'}}>{player1Name}</span>
-                {' '}wins!
-            </p>
-        )
+        winner = player1Name
+        winnerColor = FINAL_BLUE
+        if (isPlayer1) {
+            ({ reward } = useReward('rewardId', 'confetti', { zIndex: 3 }))
+        } else {
+            ({ reward } = useReward('rewardId', 'emoji', { 
+                emoji: ['😭', '😞', '😢', '😥', '😡'],
+                zIndex: 3
+            }))
+        }
+    } else if (player2BoxCount > player1BoxCount) {
+        winner = player2Name
+        winnerColor = FINAL_PINK
+        if (!isPlayer1) {
+            ({ reward } = useReward('rewardId', 'confetti', { zIndex: 3 }))
+        } else {
+            ({ reward } = useReward('rewardId', 'emoji', { 
+                emoji: ['😭', '😞', '😢', '😥', '😡'],
+                zIndex: 3
+            }))
+        }
+    } else {
+        ({ reward } = useReward('rewardId', 'emoji', { 
+            emoji: ['😕', '😐', '👌', '😶', '🤷‍♀️'],
+            zIndex: 3
+        }))
     }
-    if (player2BoxCount > player1BoxCount) {
+
+
+    useEffect(() => reward(), [])
+
+    if (winner) {
         return (
-            <p>
-                <span style={{color: FINAL_PINK, fontWeight: '700'}}>{player2Name}</span>
-                {' '}wins!
-            </p>
+            <div>
+                <p>
+                    <span id='rewardId' style={{color: winnerColor, fontWeight: '700'}}>{winner}</span>
+                    {' '}wins!
+                </p>
+            </div>
         )
     }
     return (
-        <p>It's a tie!</p>
+        <div>
+            <p>It's a <span id='rewardId' style={{fontWeight: '700'}}>tie</span>!</p>
+        </div>
     )
 }
 
