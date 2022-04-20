@@ -6,7 +6,7 @@ import { BACKEND_URL } from './shared/constants.js'
 
 axios.defaults.baseURL = BACKEND_URL
 
-const app = document.getElementById('root')
+const app = document.getElementById('app')
 ReactDOM.render(
     <App />,
     app

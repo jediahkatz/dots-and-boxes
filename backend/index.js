@@ -6,7 +6,9 @@ import { Server } from 'socket.io'
 import accountRouter from './routes/account.js'
 import gameRouter from './routes/game.js'
 import gameServer from './gameserver/gameserver.js'
-import { FRONTEND_URL } from '../frontend/src/shared/constants.js'
+import { BACKEND_URL, FRONTEND_URL } from '../frontend/src/shared/constants.js'
+import path, { dirname } from 'path'
+import { fileURLToPath } from 'url'
 
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/test'
 mongoose.connect(MONGO_URI, {
@@ -26,6 +28,7 @@ const io = new Server(server, {
 
 io.on('connection', gameServer(io))
 
+app.use(express.static('dist'))
 app.use(express.json())
 app.use(cors())
 
@@ -41,6 +44,11 @@ app.use((err, req, res, next) => {
 
 app.get('/favicon.ico', (req, res) => {
     res.status(404).send()
+})
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
 
 server.listen(port, () => {

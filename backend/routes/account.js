@@ -26,6 +26,7 @@ router.post('/signup', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
+    console.log('hi')
     try {
         const { username, password } = req.body
         if (!username || !password) {
