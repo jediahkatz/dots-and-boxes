@@ -50,6 +50,8 @@ const isGameCompleted = ({ boxes }) => {
 }
 
 const setGameCompleted = async ({ gameId, winner, player1BoxCount, player2BoxCount }) => {
+    delete games[gameId]
+
     console.log('game over!')
     const game = await Game.findById(gameId)
     game.completed = true
@@ -71,6 +73,7 @@ const setGameCompleted = async ({ gameId, winner, player1BoxCount, player2BoxCou
     }
     player1.save()
     player2.save()
+
 }
 
 const handleClickHorizontal = (io, _socket) => ({ room, row, col }) => {
@@ -93,12 +96,13 @@ const handleClickHorizontal = (io, _socket) => ({ room, row, col }) => {
     }
 
     const { completed, winner, player1BoxCount, player2BoxCount } = isGameCompleted({ boxes })
-    if (completed) {
-        setGameCompleted({ gameId: room, winner, player1BoxCount, player2BoxCount })
-    }
 
     games[room].isPlayer1Turn = didCapture ? isPlayer1Turn : !isPlayer1Turn
     io.to(room).emit(MSG_TYPE.CLICK_HORIZONTAL, { hLines, boxes, isPlayer1Turn: games[room].isPlayer1Turn })
+
+    if (completed) {
+        setGameCompleted({ gameId: room, winner, player1BoxCount, player2BoxCount })
+    }
 }
 
 const handleClickVertical = (io, _socket) => ({ room, row, col }) => {
@@ -121,12 +125,13 @@ const handleClickVertical = (io, _socket) => ({ room, row, col }) => {
     }
 
     const { completed, winner, player1BoxCount, player2BoxCount } = isGameCompleted({ boxes })
-    if (completed) {
-        setGameCompleted({ gameId: room, winner, player1BoxCount, player2BoxCount })
-    }
     
     games[room].isPlayer1Turn = didCapture ? isPlayer1Turn : !isPlayer1Turn
     io.to(room).emit(MSG_TYPE.CLICK_VERTICAL, { vLines, boxes, isPlayer1Turn: games[room].isPlayer1Turn })
+
+    if (completed) {
+        setGameCompleted({ gameId: room, winner, player1BoxCount, player2BoxCount })
+    }
 }
 
 const gameServer = io => socket => {

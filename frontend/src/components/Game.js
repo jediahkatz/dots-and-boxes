@@ -264,7 +264,7 @@ const GameOver = ({ player1BoxCount, player2BoxCount, player1Name, player2Name, 
 
     const winReward = { 
         rewardId: 'winReward', 
-        rewardType: 'emoji', 
+        rewardType: 'confetti', 
         rewardConfig: { zIndex: 3 } 
     }
     const lossReward = { 
@@ -295,15 +295,15 @@ const GameOver = ({ player1BoxCount, player2BoxCount, player1Name, player2Name, 
     }
 
     const { rewardId, rewardType, rewardConfig } = rewardParams
-    const reward = useReward(rewardId, rewardType, rewardConfig)
+    const { reward } = useReward(rewardId, rewardType, rewardConfig)
 
-    useEffect(() => reward(), [reward])
+    useEffect(() => reward(), [])
 
     if (winner) {
         return (
             <div>
                 <p>
-                    <span id={rewardId[reward]} style={{color: winnerColor, fontWeight: '700'}}>{winner}</span>
+                    <span id={rewardId} style={{color: winnerColor, fontWeight: '700'}}>{winner}</span>
                     {' '}wins!
                 </p>
             </div>
