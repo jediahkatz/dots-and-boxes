@@ -6,7 +6,7 @@ import { Server } from 'socket.io'
 import accountRouter from './routes/account.js'
 import gameRouter from './routes/game.js'
 import gameServer from './gameserver/gameserver.js'
-import { MSG_TYPE } from '../frontend/src/shared/constants.js'
+import { FRONTEND_URL } from '../frontend/src/shared/constants.js'
 
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/test'
 mongoose.connect(MONGO_URI, {
@@ -19,7 +19,7 @@ const app = express()
 const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3001',
+        origin: FRONTEND_URL,
         methods: ['GET', 'POST']
     }
 })

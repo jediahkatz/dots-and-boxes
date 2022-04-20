@@ -16,3 +16,6 @@ export const MSG_TYPE = Object.freeze({
     CLICK_HORIZONTAL: 'CLICK_HORIZONTAL',
     CLICK_VERTICAL: 'CLICK_VERTICAL',
 })
+
+export const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3001'
+export const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000'

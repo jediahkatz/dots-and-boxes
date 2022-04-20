@@ -5,12 +5,12 @@ import { io } from 'socket.io-client'
 import { Divider, Space, Card, message } from 'antd'
 import { FireFilled, FireOutlined, FireTwoTone, CopyOutlined } from '@ant-design/icons';
 import { useReward } from 'react-rewards'
-import { MSG_TYPE, OWNER } from '../shared/constants.js'
+import { BACKEND_URL, FRONTEND_URL, MSG_TYPE, OWNER } from '../shared/constants.js'
 import GameBoard from './GameBoard.js'
 import Button from './Button.js'
 import { FINAL_PINK, FINAL_BLUE } from '../shared/constants.js'
 
-const BASE_URL = 'http://localhost:3001'
+const BASE_URL = FRONTEND_URL
 
 const Game = () => {
     const { id: gameId } = useParams()
@@ -44,7 +44,7 @@ const Game = () => {
                 })
                 setPlayer1Name(p1Name)
                 setPlayer2Name(p2Name)
-                const socket = io('http://localhost:3000')
+                const socket = io(BACKEND_URL)
                 socket.emit(MSG_TYPE.JOIN_ROOM, { room: gameId })
                 socket.emit(MSG_TYPE.PLAYER_JOINED, {
                     room: gameId,
