@@ -2,7 +2,7 @@ import axios from 'axios'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from './Button.js'
-import { Divider, Space, Card } from 'antd'
+import { Card } from 'antd'
 
 const Home = () => {
     const navigate = useNavigate()

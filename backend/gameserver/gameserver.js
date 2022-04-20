@@ -81,18 +81,23 @@ const handleClickHorizontal = (io, _socket) => ({ room, row, col }) => {
     const { hLines, vLines, boxes, isPlayer1Turn } = games[room]
     const owner = isPlayer1Turn ? OWNER.PLAYER_1 : OWNER.PLAYER_2
     hLines[row][col] = owner
+
+    const didCapture = false
     if (row < boxes.length && isBoxCaptured({ row, col, hLines, vLines })) {
         boxes[row][col] = owner
+        didCapture = true
     }
     if (row-1 >= 0 && isBoxCaptured({ row: row-1, col, hLines, vLines })) {
         boxes[row-1][col] = owner
+        didCapture = true
     }
+
     const { completed, winner, player1BoxCount, player2BoxCount } = isGameCompleted({ boxes })
-    console.log({ completed, winner, player1BoxCount, player2BoxCount })
     if (completed) {
         setGameCompleted({ gameId: room, winner, player1BoxCount, player2BoxCount })
     }
-    games[room].isPlayer1Turn = !isPlayer1Turn
+
+    games[room].isPlayer1Turn = didCapture ? isPlayer1Turn : !isPlayer1Turn
     io.to(room).emit(MSG_TYPE.CLICK_HORIZONTAL, { hLines, boxes, isPlayer1Turn: games[room].isPlayer1Turn })
 }
 
@@ -104,13 +109,23 @@ const handleClickVertical = (io, _socket) => ({ room, row, col }) => {
     const { vLines, hLines, boxes, isPlayer1Turn } = games[room]
     const owner = isPlayer1Turn ? OWNER.PLAYER_1 : OWNER.PLAYER_2
     vLines[row][col] = owner
+
+    const didCapture = false
     if (col < boxes[0].length && isBoxCaptured({ row, col, hLines, vLines })) {
         boxes[row][col] = owner
+        didCapture = true
     }
     if (col-1 >= 0 && isBoxCaptured({ row, col: col-1, hLines, vLines })) {
         boxes[row][col-1] = owner
+        didCapture = true
     }
-    games[room].isPlayer1Turn = !isPlayer1Turn
+
+    const { completed, winner, player1BoxCount, player2BoxCount } = isGameCompleted({ boxes })
+    if (completed) {
+        setGameCompleted({ gameId: room, winner, player1BoxCount, player2BoxCount })
+    }
+    
+    games[room].isPlayer1Turn = didCapture ? isPlayer1Turn : !isPlayer1Turn
     io.to(room).emit(MSG_TYPE.CLICK_VERTICAL, { vLines, boxes, isPlayer1Turn: games[room].isPlayer1Turn })
 }
 
