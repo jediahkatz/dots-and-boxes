@@ -260,36 +260,44 @@ const Game = () => {
 const GameOver = ({ player1BoxCount, player2BoxCount, player1Name, player2Name, isPlayer1 }) => {    
     let winner
     let winnerColor
-    let reward
-    const { reward: winReward } = useReward('winReward', 'confetti', { zIndex: 3 })
-    const { reward: drawReward } = useReward('drawReward', 'emoji', { 
-        emoji: ['😭', '😞', '😢', '😥', '😡'],
-        zIndex: 3
-    })
-    const { reward: lossReward } = useReward('lossReward', 'emoji', { 
-        emoji: ['😭', '😞', '😢', '😥', '😡'],
-        zIndex: 3
-    })
-    const rewardId = {
-        winReward: 'winReward',
-        lossReward: 'lossReward',
-        drawReward: 'drawReward'
+    let rewardParams
+
+    const winReward = { 
+        rewardId: 'winReward', 
+        rewardType: 'emoji', 
+        rewardConfig: { zIndex: 3 } 
+    }
+    const lossReward = { 
+        rewardId: 'lossReward', rewardType: 'emoji', rewardConfig: {
+            emoji: ['😭', '😞', '😢', '😥', '😡'],
+            zIndex: 3
+        } 
+    }
+    const drawReward = { 
+        rewardId: 'drawReward', 
+        rewardType: 'emoji',
+        rewardConfig: {
+            emoji: ['😕', '😐', '🤷‍♀️', '👌', '😶'],
+            zIndex: 3
+        } 
     }
 
     if (player1BoxCount > player2BoxCount) {
         winner = player1Name
         winnerColor = FINAL_BLUE
-        reward = isPlayer1 ? winReward : lossReward
+        rewardParams = isPlayer1 ? winReward : lossReward
     } else if (player2BoxCount > player1BoxCount) {
         winner = player2Name
         winnerColor = FINAL_PINK
-        reward = isPlayer1 ? lossReward : winReward
+        rewardParams = isPlayer1 ? lossReward : winReward
     } else {
-        reward = drawReward
+        rewardParams = drawReward
     }
 
+    const { rewardId, rewardType, rewardConfig } = rewardParams
+    const reward = useReward(rewardId, rewardType, rewardConfig)
 
-    useEffect(() => reward(), [])
+    useEffect(() => reward(), [reward])
 
     if (winner) {
         return (
