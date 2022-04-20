@@ -12,7 +12,7 @@ const RequireAuth = ({ children }) => {
                 const res = await axios.get(
                     `/account/isAuthenticated`, 
                     { headers: {
-                        'x-auth-token': sessionStorage.getItem('token'),
+                        'x-auth-token': localStorage.getItem('token'),
                         'content-type': 'application/json'
                     }}
                 )
@@ -20,7 +20,7 @@ const RequireAuth = ({ children }) => {
                 if (!isAuthenticated) {
                     navigate('/login')
                 } else {
-                    setIsAuthed(XMLDocument)
+                    setIsAuthed(true)
                 }
             } catch (e) {
                 navigate('/login')

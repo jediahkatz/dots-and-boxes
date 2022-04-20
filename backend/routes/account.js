@@ -55,7 +55,6 @@ router.post('/login', async (req, res) => {
 router.post('/logout', auth, (req, res) => {
     try {
         localStorage.removeItem('token')
-        sessionStorage.removeItem('token')
         res.send({ msg: 'Successfully logged out' })
     } catch (e) {
         console.log(e)

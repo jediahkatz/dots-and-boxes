@@ -31,7 +31,7 @@ const Game = () => {
                 const res = await axios.get(
                     `/game/info/${gameId}`, 
                     { headers: {
-                        'x-auth-token': sessionStorage.getItem('token'),
+                        'x-auth-token': localStorage.getItem('token'),
                         'content-type': 'application/json'
                     }}
                 )

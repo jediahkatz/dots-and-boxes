@@ -27,7 +27,7 @@ const Login = () => {
                                 if (error) {
                                     alert(error)
                                 } else {
-                                    sessionStorage.setItem('token', token)
+                                    localStorage.setItem('token', token)
                                     navigate('/')
                                 }
                             }}/>
