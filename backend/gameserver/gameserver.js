@@ -82,7 +82,7 @@ const handleClickHorizontal = (io, _socket) => ({ room, row, col }) => {
     const owner = isPlayer1Turn ? OWNER.PLAYER_1 : OWNER.PLAYER_2
     hLines[row][col] = owner
 
-    const didCapture = false
+    let didCapture = false
     if (row < boxes.length && isBoxCaptured({ row, col, hLines, vLines })) {
         boxes[row][col] = owner
         didCapture = true
@@ -110,7 +110,7 @@ const handleClickVertical = (io, _socket) => ({ room, row, col }) => {
     const owner = isPlayer1Turn ? OWNER.PLAYER_1 : OWNER.PLAYER_2
     vLines[row][col] = owner
 
-    const didCapture = false
+    let didCapture = false
     if (col < boxes[0].length && isBoxCaptured({ row, col, hLines, vLines })) {
         boxes[row][col] = owner
         didCapture = true
