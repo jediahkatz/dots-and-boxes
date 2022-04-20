@@ -88,7 +88,7 @@ const Game = () => {
             }
         }
         getGameInfo()
-    }, [gameId])
+    }, [gameId, player2Name])
 
     const { rows, cols, isPlayer1 } = gameInfo
 
@@ -261,34 +261,31 @@ const GameOver = ({ player1BoxCount, player2BoxCount, player1Name, player2Name, 
     let winner
     let winnerColor
     let reward
+    const { reward: winReward } = useReward('winReward', 'confetti', { zIndex: 3 })
+    const { reward: drawReward } = useReward('drawReward', 'emoji', { 
+        emoji: ['😭', '😞', '😢', '😥', '😡'],
+        zIndex: 3
+    })
+    const { reward: lossReward } = useReward('lossReward', 'emoji', { 
+        emoji: ['😭', '😞', '😢', '😥', '😡'],
+        zIndex: 3
+    })
+    const rewardId = {
+        winReward: 'winReward',
+        lossReward: 'lossReward',
+        drawReward: 'drawReward'
+    }
 
     if (player1BoxCount > player2BoxCount) {
         winner = player1Name
         winnerColor = FINAL_BLUE
-        if (isPlayer1) {
-            ({ reward } = useReward('rewardId', 'confetti', { zIndex: 3 }))
-        } else {
-            ({ reward } = useReward('rewardId', 'emoji', { 
-                emoji: ['😭', '😞', '😢', '😥', '😡'],
-                zIndex: 3
-            }))
-        }
+        reward = isPlayer1 ? winReward : lossReward
     } else if (player2BoxCount > player1BoxCount) {
         winner = player2Name
         winnerColor = FINAL_PINK
-        if (!isPlayer1) {
-            ({ reward } = useReward('rewardId', 'confetti', { zIndex: 3 }))
-        } else {
-            ({ reward } = useReward('rewardId', 'emoji', { 
-                emoji: ['😭', '😞', '😢', '😥', '😡'],
-                zIndex: 3
-            }))
-        }
+        reward = isPlayer1 ? lossReward : winReward
     } else {
-        ({ reward } = useReward('rewardId', 'emoji', { 
-            emoji: ['😕', '😐', '👌', '😶', '🤷‍♀️'],
-            zIndex: 3
-        }))
+        reward = drawReward
     }
 
 
@@ -298,7 +295,7 @@ const GameOver = ({ player1BoxCount, player2BoxCount, player1Name, player2Name, 
         return (
             <div>
                 <p>
-                    <span id='rewardId' style={{color: winnerColor, fontWeight: '700'}}>{winner}</span>
+                    <span id={rewardId[reward]} style={{color: winnerColor, fontWeight: '700'}}>{winner}</span>
                     {' '}wins!
                 </p>
             </div>
@@ -306,7 +303,7 @@ const GameOver = ({ player1BoxCount, player2BoxCount, player1Name, player2Name, 
     }
     return (
         <div>
-            <p>It's a <span id='rewardId' style={{fontWeight: '700'}}>tie</span>!</p>
+            <p>It's a <span id='rewardId' style={{fontWeight: '700'}}>draw</span>!</p>
         </div>
     )
 }
