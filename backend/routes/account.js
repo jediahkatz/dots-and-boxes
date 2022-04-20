@@ -26,7 +26,6 @@ router.post('/signup', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-    console.log('hi')
     try {
         const { username, password } = req.body
         if (!username || !password) {
@@ -61,6 +60,23 @@ router.post('/logout', auth, (req, res) => {
     } catch (e) {
         console.log(e)
         res.status(500).send({ error: e.message })
+    }
+})
+
+router.get('/isAuthenticated', (req, res) => {
+    try {
+        const token = req.header('x-auth-token')
+        if (!token) {
+            return res.status(200).json({ isAuthenticated: false })
+        }
+        const verified = jwt.verify(token, process.env.JWT_SECRET)
+        if (!verified) {
+            return res.status(200).json({ isAuthenticated: false })
+        }
+        return res.status(200).json({ isAuthenticated: true })
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({ error: e.message })
     }
 })
 

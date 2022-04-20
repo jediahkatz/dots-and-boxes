@@ -22,12 +22,19 @@ const Signup = () => {
                         </Space>
                         <Space direction="vertical" size="middle">
                             <Button text='Sign Up' onClick={async () => {
-                                const res = await axios.post('/account/signup', { username, password })
-                                const { error } = res.data
-                                if (error) {
-                                    alert(error)
+                                const signupRes = await axios.post('/account/signup', { username, password })
+                                const { error: signupError } = signupRes.data
+                                if (signupError) {
+                                    alert(signupError)
                                 } else {
-                                    navigate('/login')
+                                    const loginRes = await axios.post('/account/login', { username, password })
+                                    const { error: loginError } = loginRes.data
+                                    if (loginError) {
+                                        navigate('/login')
+                                        console.log(loginError)
+                                    } else {
+                                        navigate('/')
+                                    }
                                 }
                             }}/>
                             <p>

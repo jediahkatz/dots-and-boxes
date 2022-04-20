@@ -27,6 +27,7 @@
     "build": "parcel build frontend/src/index.html",
     "server": "nodemon backend/index.js",
     "start": "npm run server",
+    "dev": "concurrently \"npm run frontend\" \"npm run server\"",
     "heroku-postbuild": "npm run build"
   },
   "author": "",

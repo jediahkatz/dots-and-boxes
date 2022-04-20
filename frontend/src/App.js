@@ -9,6 +9,7 @@ import Home from './components/Home.js'
 import Login from './components/Login.js'
 import Signup from './components/Signup.js'
 import JoinGame from './components/JoinGame.js'
+import RequireAuth from './components/RequireAuth.js'
 import 'antd/dist/antd.css';
 import "./styles.css"
 
@@ -17,9 +18,9 @@ const App = () => {
     <Router>
       <div style={{fontFamily: '\'Raleway\', sans-serif'}}>
         <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/join/:id' element={<JoinGame />} />
-          <Route path='/game/:id' element={<Game />} />
+          <Route path='/' element={<RequireAuth><Home /></RequireAuth>} />
+          <Route path='/join/:id' element={<RequireAuth><JoinGame /></RequireAuth>} />
+          <Route path='/game/:id' element={<RequireAuth><Game /></RequireAuth>} />
           <Route path='/signup' element={<Signup/>} />
           <Route path='/login' element={<Login />} />
         </Routes>
