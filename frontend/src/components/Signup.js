@@ -5,12 +5,15 @@ import Button from './Button.js'
 import Input from './Input.js'
 import { Space, Card } from 'antd'
 import { FINAL_PINK } from '../shared/constants.js'
+import { ConsoleSqlOutlined } from '@ant-design/icons'
 
 const Signup = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
     const { state } = useLocation()
+
+    console.log('state path', state?.path)
 
     return (
         <div className="pink-bg center-box-layout">
@@ -29,18 +32,18 @@ const Signup = () => {
                                     alert(signupError)
                                 } else {
                                     const loginRes = await axios.post('/account/login', { username, password })
-                                    const { error: loginError } = loginRes.data
+                                    const { error: loginError, token } = loginRes.data
                                     if (loginError) {
                                         navigate('/login')
-                                        console.log(loginError)
                                     } else {
+                                        sessionStorage.setItem('token', token)
                                         navigate(state?.path || '/')
                                     }
                                 }
                             }}/>
                             <p>
                                 Already have an account?&nbsp;
-                                <Link to='/login' style={{ color: FINAL_PINK }}>Log in</Link>
+                                <Link to='/login' style={{ color: FINAL_PINK }} replace state={{ path: state.path }}>Log in</Link>
                             </p>
                         </Space>
                     </Space>

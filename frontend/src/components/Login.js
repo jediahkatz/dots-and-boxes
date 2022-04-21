@@ -11,8 +11,8 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
     const { state } = useLocation()
-    console.log('state path', state?.path)
 
+    console.log('state path', state?.path)
     return (
         <div className="blue-bg center-box-layout">
             <div>
@@ -35,7 +35,7 @@ const Login = () => {
                             }}/>
                             <p>
                                 Don't have an account?&nbsp;
-                                <Link style={{ color: FINAL_BLUE }} to='/signup' >Sign up</Link>
+                                <Link to='/signup' style={{ color: FINAL_BLUE }} replace state={{ path: state.path }}>Sign up</Link>
                             </p>
                         </Space>
                     </Space>
