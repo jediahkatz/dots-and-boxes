@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { Spin, Space } from 'antd'
 
 const JoinGame = () => {
     const { id: gameId } = useParams()
@@ -25,9 +26,9 @@ const JoinGame = () => {
     joinGame()
 
     return (
-        <div>
-            TODO: error msg goes here
-        </div>
+        <Space>
+            <Spin size='large' />
+        </Space>
     )
 }
 

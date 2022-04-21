@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { Space, Spin } from 'antd'
 
 const RequireAuth = ({ children }) => {
     const [isAuthed, setIsAuthed] = useState(false)
@@ -30,7 +31,14 @@ const RequireAuth = ({ children }) => {
         checkAuth()
     }, [])
 
-    return isAuthed ? children : <p>Loading...</p>
+    return (
+        isAuthed ? children : 
+        (
+            <Space>
+                <Spin size='large' />
+            </Space>
+        )
+    )
 }
 
 export default RequireAuth

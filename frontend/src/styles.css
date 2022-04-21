@@ -34,3 +34,7 @@
     align-items: flex-end;
     justify-content: space-around;
 }
+
+.ant-dot-spin-item {
+    background-color: #00B4D8;
+}

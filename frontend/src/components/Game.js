@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { io } from 'socket.io-client'
-import { Divider, Space, Card, message } from 'antd'
+import { Divider, Space, Card, Spin, message } from 'antd'
 import { FireFilled, FireOutlined, FireTwoTone, CopyOutlined } from '@ant-design/icons';
 import { useReward } from 'react-rewards'
 import { BACKEND_URL, FRONTEND_URL, MSG_TYPE, OWNER } from '../shared/constants.js'
@@ -132,9 +132,9 @@ const Game = () => {
     
     if (!player1Name || !hLines || hLines.length === 0 || !vLines || vLines.length === 0 || !boxes || boxes.length === 0) {
         return (
-            <div>
-                <p>Loading!...</p>
-            </div>
+            <Space>
+                <Spin size='large' />
+            </Space>
         )
     }
 
