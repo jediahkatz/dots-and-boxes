@@ -52,16 +52,6 @@ router.post('/login', async (req, res) => {
     }
 })
 
-router.post('/logout', auth, (req, res) => {
-    try {
-        localStorage.removeItem('token')
-        res.send({ msg: 'Successfully logged out' })
-    } catch (e) {
-        console.log(e)
-        res.status(500).send({ error: e.message })
-    }
-})
-
 router.get('/isAuthenticated', (req, res) => {
     try {
         const token = req.header('x-auth-token')
@@ -74,8 +64,7 @@ router.get('/isAuthenticated', (req, res) => {
         }
         return res.status(200).json({ isAuthenticated: true })
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ error: e.message })
+        res.status(200).json({ isAuthenticated: false })
     }
 })
 

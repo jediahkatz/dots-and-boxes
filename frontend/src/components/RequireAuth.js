@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 const RequireAuth = ({ children }) => {
     const [isAuthed, setIsAuthed] = useState(false)
     const navigate = useNavigate()
+    const location = useLocation()
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -12,26 +13,24 @@ const RequireAuth = ({ children }) => {
                 const res = await axios.get(
                     `/account/isAuthenticated`, 
                     { headers: {
-                        'x-auth-token': localStorage.getItem('token'),
+                        'x-auth-token': sessionStorage.getItem('token'),
                         'content-type': 'application/json'
                     }}
                 )
                 const { isAuthenticated } = res.data
                 if (!isAuthenticated) {
-                    navigate('/login')
+                    navigate('/login', { replace: true, state: { path: location.pathname }})
                 } else {
                     setIsAuthed(true)
                 }
             } catch (e) {
-                navigate('/login')
+                navigate('/login', { replace: true, state: { path: location.pathname }})
             }
         }
         checkAuth()
     }, [])
 
-    console.log(isAuthed)
-
-    return isAuthed ? children : <p>bro...</p>
+    return isAuthed ? children : <p>Loading...</p>
 }
 
 export default RequireAuth

@@ -11,7 +11,7 @@ const Home = () => {
             '/game/create', 
             { rows: 3, cols: 3 }, 
             { headers: {
-                'x-auth-token': localStorage.getItem('token'),
+                'x-auth-token': sessionStorage.getItem('token'),
                 'content-type': 'application/json'
             }}
         )
@@ -27,8 +27,8 @@ const Home = () => {
             <Card 
                 style={{ textAlign: 'center' }}
                 actions={[
-                    <a href='/signup'><div>Sign Up</div></a>,
-                    <a href='/login'><div>Log In</div></a>,
+                    <a href='/login'><div>Log in</div></a>,
+                    <a href='/logout'><div>Log out</div></a>,
                 ]}
             >
                 <div style={{ padding: '30px' }}>

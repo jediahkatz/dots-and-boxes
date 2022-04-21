@@ -11,7 +11,7 @@ const JoinGame = () => {
             `/game/join/${gameId}`, 
             { rows: 3, cols: 3 }, 
             { headers: {
-                'x-auth-token': localStorage.getItem('token'),
+                'x-auth-token': sessionStorage.getItem('token'),
                 'content-type': 'application/json'
             }}
         )
