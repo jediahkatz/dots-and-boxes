@@ -8,6 +8,7 @@ import { useReward } from 'react-rewards'
 import { BACKEND_URL, FRONTEND_URL, MSG_TYPE, OWNER } from '../shared/constants.js'
 import GameBoard from './GameBoard.js'
 import Button from './Button.js'
+import Rules from './Rules.js'
 import { FINAL_PINK, FINAL_BLUE } from '../shared/constants.js'
 
 const BASE_URL = FRONTEND_URL
@@ -170,6 +171,7 @@ const Game = () => {
 
     return (
         <div className={isPlayer1 ? 'blue-bg center-box-layout' : 'pink-bg center-box-layout'}>
+            <Rules />
             <div id="animate"></div>
             <div>
                 <Card>
