@@ -11,7 +11,7 @@ const Rules = () => {
             <span>
                 <img src={rules1} width={'50%'} height={'50%'} />
             </span>
-            <p>Fill in the fourth line in a 1-by-1 square to capture it and take another turn.</p>
+            <p>Fill in the fourth line in a 1-by-1 box to capture it and take another turn.</p>
             <span>
                 <img src={rules2} width={'50%'} height={'50%'} />
             </span>

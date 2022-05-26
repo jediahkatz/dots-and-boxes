@@ -52,6 +52,31 @@ router.post('/login', async (req, res) => {
     }
 })
 
+/**
+ * Authenticate as a guest by creating a new account with a random username and password.
+ * Obviously this system is far from future-proof.
+ */
+router.post('/guest', async (req, res) => {
+    try {
+        let username
+        do {
+            username = `guest#${Math.floor(Math.random() * 100000)}`
+        } while (await User.findOne({ username }))
+
+        const password = Math.random().toString(36)
+        const passwordHash = await bcrypt.hash(password, 10)
+        const user = await User.create({ username, password: passwordHash })
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: 86400 })
+        res.send({
+            token,
+            userId: user.id
+        })
+    } catch (e) {
+        console.log(e)
+        res.status(500).send({ error: e.message })
+    }
+})
+
 router.get('/isAuthenticated', (req, res) => {
     try {
         const token = req.header('x-auth-token')

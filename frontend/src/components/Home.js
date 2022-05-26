@@ -34,7 +34,7 @@ const Home = () => {
                 <div style={{ padding: '30px' }}>
                     <h2>Dots and Boxes</h2>
                     <br />
-                    <Button text='Create game' onClick={createGame}/>
+                    <Button text='New game' onClick={createGame}/>
                 </div>
             </Card>
         </div>

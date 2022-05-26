@@ -43,7 +43,7 @@ const Signup = () => {
                             }}/>
                             <p>
                                 Already have an account?&nbsp;
-                                <Link to='/login' style={{ color: FINAL_PINK }} replace state={{ path: state.path }}>Log in</Link>
+                                <Link to='/login' style={{ color: FINAL_PINK }} replace state={{ path: state?.path }}>Log in</Link>
                             </p>
                         </Space>
                     </Space>

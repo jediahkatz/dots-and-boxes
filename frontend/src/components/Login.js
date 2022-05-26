@@ -35,8 +35,18 @@ const Login = () => {
                             }}/>
                             <p>
                                 Don't have an account?&nbsp;
-                                <Link to='/signup' style={{ color: FINAL_BLUE }} replace state={{ path: state.path }}>Sign up</Link>
+                                <Link to='/signup' style={{ color: FINAL_BLUE }} replace state={{ path: state?.path }}>Sign up</Link>
                             </p>
+                            <Button text='Play as guest' onClick={async () => {
+                                const res = await axios.post('/account/guest')
+                                const { error, token } = res.data
+                                if (error) {
+                                    alert(error)
+                                } else {
+                                    sessionStorage.setItem('token', token)
+                                    navigate(state?.path || '/')
+                                }
+                            }}/>
                         </Space>
                     </Space>
                 </Card>
