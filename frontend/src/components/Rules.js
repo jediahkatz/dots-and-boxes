@@ -8,13 +8,14 @@ const Rules = () => {
     return (
         <Modal visible={visible} footer={null} onCancel={() => setVisible(false)}>
             <p>Take turns drawing lines to connect the dots.</p>
-            <span>
+            <div>
                 <img src={rules1} width={'50%'} height={'50%'} />
-            </span>
+            </div>
             <p>Fill in the fourth line in a 1-by-1 box to capture it and take another turn.</p>
-            <span>
+            <div>
                 <img src={rules2} width={'50%'} height={'50%'} />
-            </span>
+            </div>
+            <br />
             <p>Whoever captures a majority of boxes wins!</p>
         </Modal>
     )
